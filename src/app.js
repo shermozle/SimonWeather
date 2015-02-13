@@ -30,10 +30,10 @@ window.add(timeText);
 
 // Create DateText
 var dateText = new UI.TimeText({
-  position: new Vector2(0, 60),
+  position: new Vector2(0, 68),
   size: new Vector2(144, 30),
   text: "%A %d %b",
-  font: 'gothic-28',
+  font: 'gothic-18-bold',
   color: 'white',
   textAlign: 'center'
 });
@@ -54,21 +54,44 @@ var weatherBgRect = new UI.Rect({
 // Add Rect to Window
 window.add(weatherBgRect);
 
+var URL = 'http://wsiphone.theweather.com.au/?lt=APLOC&lc=753&obs=3(closest=4)&locdet=1&format=json&u=12994-1440&k=43F01DF1E32AB99EE694D1A1EEF497EC';
+var timeOut = 10; // minutes
+var debug = 0;
+
+if (debug) {
+  timeOut = timeOut * 1000;
+} else {
+  timeOut = timeOut * 60 * 1000;
+}
+
 // Create weather text
-var loadingText = new UI.Text({
-  position: new Vector2(0, 110),
+var temperatureText = new UI.Text({
+  position: new Vector2(0, 104),
   size: new Vector2(144, 30),
-  text: "Loading...",
-  font: 'gothic-18-bold',
+  text: 'loading...',
+  font: 'gothic-28-bold',
   color: 'black',
   textAlign: 'center'
 });
+window.add(temperatureText);
 
-// Add the TimeText
-window.add(loadingText);
+// Create weather last updated text
+var lastUpdatedText = new UI.Text({
+  position: new Vector2(0,138),
+  size: new Vector2(140, 10),
+  text: '',
+  font: 'gothic-14',
+  color: 'black',
+  textAlign: 'right'
+});
+window.add(lastUpdatedText);
 
-var URL = 'http://wsiphone.theweather.com.au/?lt=APLOC&lc=753&obs=3(closest=4)&locdet=1&format=json&u=12994-1440&k=43F01DF1E32AB99EE694D1A1EEF497EC';
-var timeOut = 10; // minutes
+function formatTime(input) {
+  if (input < 10)  {
+    input = "0" + input;
+  }
+  return input;
+}
 
 function getWeather() {
   // Make the request
@@ -83,42 +106,24 @@ function getWeather() {
       console.log("Successfully fetched weather data!");
       
       var temperature = data.countries[0].locations[0].conditions[2].temperature + "° " + data.countries[0].locations[0].conditions[2].relative_humidity + '%';
+      if (debug) {
+        temperature = (Math.random()*100).toFixed(1) + "° " + (Math.random()*100).toFixed(1) + '%';
+      }
   
-      // Create weather text
-      var temperatureText = new UI.Text({
-        position: new Vector2(0, 104),
-        size: new Vector2(144, 30),
-        text: temperature,
-        font: 'bitham-30-black',
-        color: 'black',
-        textAlign: 'center'
-      });
-  
-      window.remove(loadingText);
-      window.add(temperatureText);
-
-      // Create weather last updated text
-      var lastUpdatedText = new UI.Text({
-        position: new Vector2(0,138),
-        size: new Vector2(140, 10),
-        text: 'Src: ' + new Date(data.countries[0].locations[0].conditions[2].local_time).getHours() + ':' + new Date(data.countries[0].locations[0].conditions[2].local_time).getMinutes() + ' Refreshed: ' + new Date().getHours() + ':' + new Date().getMinutes(),
-        font: 'gothic-14',
-        color: 'black',
-        textAlign: 'right'
-      });
-      
-      window.add(lastUpdatedText);
+      temperatureText.text(temperature);
+      console.log(temperature);      
+      lastUpdatedText.text('Src: ' + formatTime(new Date(data.countries[0].locations[0].conditions[2].local_time).getHours()) + ':' + formatTime(new Date(data.countries[0].locations[0].conditions[2].local_time).getMinutes()) + ' Refreshed: ' + formatTime(new Date().getHours()) + ':' + formatTime(new Date().getMinutes()));
       
     },
     function(error) {
       // Failure!
       console.log('Failed fetching weather data: ' + error);
-      window.add(loadingText);
+      temperatureText.text('Failed');
     }
   );
 }
 
 getWeather();
-setTimeout(function () {
+setInterval(function () {
   getWeather();
-}, timeOut * 60 * 1000);
+}, timeOut);
