@@ -82,14 +82,14 @@ function getWeather() {
       // Success!
       console.log("Successfully fetched weather data!");
       
-      var temperature = data.countries[0].locations[0].conditions[2].temperature + "°";
+      var temperature = data.countries[0].locations[0].conditions[2].temperature + "° " + data.countries[0].locations[0].conditions[2].relative_humidity + '%';
   
       // Create weather text
       var temperatureText = new UI.Text({
-        position: new Vector2(0, 100),
+        position: new Vector2(0, 104),
         size: new Vector2(144, 30),
         text: temperature,
-        font: 'bitham-42-bold',
+        font: 'bitham-30-black',
         color: 'black',
         textAlign: 'center'
       });
