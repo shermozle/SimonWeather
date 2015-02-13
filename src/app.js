@@ -96,7 +96,19 @@ function getWeather() {
   
       window.remove(loadingText);
       window.add(temperatureText);
-        
+
+      // Create weather last updated text
+      var lastUpdatedText = new UI.Text({
+        position: new Vector2(0,138),
+        size: new Vector2(140, 10),
+        text: 'Src: ' + new Date(data.countries[0].locations[0].conditions[2].local_time).getHours() + ':' + new Date(data.countries[0].locations[0].conditions[2].local_time).getMinutes() + ' Refreshed: ' + new Date().getHours() + ':' + new Date().getMinutes(),
+        font: 'gothic-14',
+        color: 'black',
+        textAlign: 'right'
+      });
+      
+      window.add(lastUpdatedText);
+      
     },
     function(error) {
       // Failure!
