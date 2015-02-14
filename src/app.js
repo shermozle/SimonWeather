@@ -9,7 +9,7 @@ var window = new UI.Window();
 var bgRect = new UI.Rect({
   position: new Vector2(0, 0),
   size: new Vector2(144, 60),
-  backgroundColor: 'white'
+  backgroundColor: 'black'
 });
 
 // Add Rect to Window
@@ -17,11 +17,11 @@ window.add(bgRect);
 
 // Create TimeText
 var timeText = new UI.TimeText({
-  position: new Vector2(0, 5),
+  position: new Vector2(0, 0),
   size: new Vector2(144, 30),
   text: "%H:%M",
-  font: 'bitham-42-bold',
-  color: 'black',
+  font: 'roboto-bold-subset-49',
+  color: 'white',
   textAlign: 'center'
 });
 
@@ -77,7 +77,7 @@ window.add(temperatureText);
 
 // Create weather last updated text
 var lastUpdatedText = new UI.Text({
-  position: new Vector2(0,138),
+  position: new Vector2(0,137),
   size: new Vector2(140, 10),
   text: '',
   font: 'gothic-14',
